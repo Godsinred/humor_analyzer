@@ -1,7 +1,8 @@
-joke(haha).
-pun(lol).
+% list of facts
+dog(john).
+dog(ben).
+cat(ruth).
 
-humor(X) :- joke(X).
-humor(X) :- pun(X).
-
-:- initialization humor(rofl).
+% list of rules
+animal(X) :- cat(X).
+animal(X) :- dog(X).

@@ -1,5 +1,7 @@
-dog(john).
-dog(ben).
-cat(ruth).
-animal(X) :- cat(X).
-animal(X) :- dog(X).
+joke(haha).
+pun(lol).
+
+humor(X) :- joke(X).
+humor(X) :- pun(X).
+
+:- initialization humor(rofl).

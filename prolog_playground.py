@@ -1,7 +1,6 @@
 import os
 import signal
 import subprocess
-
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QLineEdit, QMessageBox, QLabel
 from PyQt5.QtGui import QIcon
@@ -19,6 +18,7 @@ class App(QMainWindow):
         self.initUI()
 
     def initUI(self):
+        # creates the UI
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
@@ -33,22 +33,22 @@ class App(QMainWindow):
         # connects the query text to the connect button when 'ENTER' is pressed by the user
         self.textbox.returnPressed.connect(self.on_click)
         self.textbox.move(20, 50)
-        self.textbox.resize(280, 40)
+        self.textbox.resize(280, 30)
 
         # Create a button in the window
-        self.button = QPushButton('Show text', self)
-        self.button.move(20,100)
+        self.button = QPushButton('Send Query', self)
+        self.button.move(20,90)
 
         # Create result label
         self.result_label = QLabel(self)
         self.result_label.setText('Result: ')
-        self.result_label.move(200, 100)
+        self.result_label.move(200, 90)
         self.result_label.resize(50, 30)
 
         # Create answer label
         self.answer_label = QLabel(self)
         self.answer_label.setText('None')
-        self.answer_label.move(250, 100)
+        self.answer_label.move(250, 90)
         self.answer_label.resize(50, 30)
 
         # connect button to function on_click
@@ -58,22 +58,27 @@ class App(QMainWindow):
 
     @pyqtSlot()
     def on_click(self):
+        # gets the text from the text box
         question = self.textbox.text()
 
+        # sets up the swipl program in a subprocess and feeds it the file to be initiaded with
         # NOTE: stderr=subprocess.PIPE makes the swipl intro in terminal go away
-        p = subprocess.Popen(['swipl', 'foo.pl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, universal_newlines=True)
+        p = subprocess.Popen(['swipl', 'humor.pl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, universal_newlines=True)
+
+        # looks for if the query was true if not then it must be false
         # The communicate() method returns a tuple (stdoutdata, stderrdata).
         answer = 'True' if p.communicate(question)[0].find('true') == 1 else 'False'
         print(question + '    ' + answer)
+        # terminates the subprocess
         p.kill()
 
+        # udpates all the labels and texts boxes with the answer
         # added repaint due to the know compatibility issue with MAC OSx
         # https://stackoverflow.com/questions/56553257/pyinstaller-and-pyqt5-macos-mojave-compatibility-issues
         self.answer_label.setText(answer)
         self.answer_label.repaint()
         self.textbox.setText("")
         self.textbox.repaint()
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
