@@ -63,11 +63,13 @@ class App(QMainWindow):
 
         # sets up the swipl program in a subprocess and feeds it the file to be initiaded with
         # NOTE: stderr=subprocess.PIPE makes the swipl intro in terminal go away
-        p = subprocess.Popen(['swipl', 'humor.pl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, universal_newlines=True)
+        p = subprocess.Popen(['swipl', 'sentence.pl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, universal_newlines=True)
 
         # looks for if the query was true if not then it must be false
         # The communicate() method returns a tuple (stdoutdata, stderrdata).
-        answer = 'True' if p.communicate(question)[0].find('true') == 1 else 'False'
+        response = p.communicate(question)
+        print(response)
+        answer = 'True' if response[0].find('true') == 1 else 'False'
         print(question + '    ' + answer)
         # terminates the subprocess
         p.kill()
