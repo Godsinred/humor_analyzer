@@ -5,6 +5,7 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QLineEdit, QMessageBox, QLabel
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
+import regex as re
 
 class App(QMainWindow):
 
@@ -68,8 +69,12 @@ class App(QMainWindow):
         # looks for if the query was true if not then it must be false
         # The communicate() method returns a tuple (stdoutdata, stderrdata).
         response = p.communicate(question)
-        print(response)
-        answer = 'True' if response[0].find('true') == 1 else 'False'
+
+        answer = 'False'
+        # uses regex to see if true was returned by swipl
+        if re.search('true', response[0]):
+            answer = 'True'
+
         print(question + '    ' + answer)
         # terminates the subprocess
         p.kill()

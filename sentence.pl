@@ -1,6 +1,7 @@
 sentence("knock knock . who is there ? Nobel . Nobel who ?"). % matches all rules
 sentence("knock knock . who is there ? Nobel . Incorrect who ?"). % does not match
 % funny("knock knock . who is there ? Nobel Prize . Nobel Prize who ? Nobel Winner !").
+% funny("knock knock . who is there ? i love . i love who ? i dont know you tell me !").
 
 % generate all consecutive sub-lists of S in X
 %
