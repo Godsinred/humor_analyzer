@@ -305,9 +305,6 @@ ishom(A, B):- get_all_homonyms(A, [], L), common_member(L, B).
 % ishom(A,B) :- ishom(B,A), writeln('rule2').
 % ishom(A,B) :- ishom(A,C), ishom(C,B), writeln('rule1').
 
-% add_elem_in_list([], E, R) :- append([], [E], R).
-add_elem_in_list(L, E, R) :- append(L, [E], R).
-
 get_all_homonyms([], R, K) :- writeln("empty list"), append([], R, K).
 get_all_homonyms([LH|LT], R, K) :- writeln("here"), !, ishom(LH, E), writeln(E), append(R, [E], S), writeln(S),  get_all_homonyms(LT, S, K).
 
@@ -337,8 +334,6 @@ funnyFirst([A, B, "."]) :- A=="knock", A==B. % first two words must be the same
 
 funnySecond(["who", "is", "there", "?"]).% must match this exact list of words
 
-% funnyThird([_, "."]). % any single word matches (followed by period)
-%
 funnyThird(S) :- last(S, ".").
 % The | denotes a 'tail' or 'the rest of the list.'
 
@@ -351,10 +346,10 @@ list_butlast_prev([], [], _).
 list_butlast_prev([X1|Xs], [X0|Ys], X0) :-
    list_butlast_prev(Xs, Ys, X1).           % lag behind by one
 
-%funnyFourth(Fourthpart, Thirdpart): first word of each part must match
-% funnyFourth([A, "who", "?"|_], [A,"."]).
+% must end with "who?"
 funnyFourth(S) :- last(S, "?"), list_butlast(S, X), last(X, "who").
 
+% the main context must match word for word. ie -'.' from third and -'who?' from fourth
 checkThirdFourth(Third, Fourth) :- same(Third, Fourth).
 same([], []).
 same([H1|T1], [H2|T2]):-
