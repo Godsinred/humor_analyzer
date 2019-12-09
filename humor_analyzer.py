@@ -14,8 +14,8 @@ class App(QMainWindow):
         self.title = 'Humor Analyzer'
         self.left = 10
         self.top = 10
-        self.width = 400
-        self.height = 140
+        self.width = 800
+        self.height = 200
         self.initUI()
 
     def initUI(self):
@@ -23,34 +23,35 @@ class App(QMainWindow):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
+        gaps = 20
         # Create textbox
         self.prompt_label = QLabel(self)
         self.prompt_label.setText('Please enter your query to be entered in swipl: ')
-        self.prompt_label.move(20, 20)
-        self.prompt_label.resize(280,20)
+        self.prompt_label.move(gaps, gaps)
+        self.prompt_label.resize(self.width/2,gaps)
 
         # Create textbox
         self.textbox = QLineEdit(self)
         # connects the query text to the connect button when 'ENTER' is pressed by the user
         self.textbox.returnPressed.connect(self.on_click)
-        self.textbox.move(20, 50)
-        self.textbox.resize(280, 30)
+        self.textbox.move(gaps, gaps*3)
+        self.textbox.resize(self.width-100, gaps*2)
 
         # Create a button in the window
         self.button = QPushButton('Send Query', self)
-        self.button.move(20,90)
+        self.button.move(gaps,gaps*6)
 
         # Create result label
         self.result_label = QLabel(self)
         self.result_label.setText('Result: ')
-        self.result_label.move(200, 90)
-        self.result_label.resize(50, 30)
+        self.result_label.move(self.width-200, gaps*6)
+        self.result_label.resize(gaps*5, gaps*2)
 
         # Create answer label
         self.answer_label = QLabel(self)
         self.answer_label.setText('None')
-        self.answer_label.move(250, 90)
-        self.answer_label.resize(50, 30)
+        self.answer_label.move(self.width-150, gaps*6)
+        self.answer_label.resize(gaps*5, gaps*2)
 
         # connect button to function on_click
         self.button.clicked.connect(self.on_click)
@@ -61,6 +62,8 @@ class App(QMainWindow):
     def on_click(self):
         # gets the text from the text box
         question = self.textbox.text()
+
+        question = preprocess_query(question)
 
         # sets up the swipl program in a subprocess and feeds it the file to be initiaded with
         # NOTE: stderr=subprocess.PIPE makes the swipl intro in terminal go away
@@ -86,6 +89,31 @@ class App(QMainWindow):
         self.answer_label.repaint()
         self.textbox.setText("")
         self.textbox.repaint()
+
+def preprocess_query(query):
+    # funny("knock knock . who is there ? Nobel Prize . Nobel Prize who ? Nobel Winner !").
+
+    answer = r'funny("'
+    query = query.lower()
+    # removes all excess symbols for prolog to compare
+    query = query.replace(', ', '')
+    query = query.replace('\'', '')
+    query = query.replace('-', '')
+    query = query.split()
+
+    symbols = ['.', '?', '!']
+    for i in query:
+        if i[-1] in symbols:
+            answer += i[:-1] + ' ' + i[-1] + ' '
+        else:
+            answer += i + ' '
+
+    answer = answer.strip() + r'").'
+    print(answer)
+    return answer
+
+# Knock knock. Who is there? Witch. Witch who? Which one of you will give me some halloween candy?
+# Knock knock. Who is there? Nobel Prize. Nobel Prize who? Nobel Winner!
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

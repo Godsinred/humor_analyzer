@@ -11,7 +11,7 @@ def main():
         # print(pair)
 
         for i in range(len(pair)-1):
-            all_homs.add('ishom({}, {}).\n'.format(pair[i], pair[i+1]))
+            all_homs.add('ishom(\"{}\", \"{}\").\n'.format(pair[i], pair[i+1]))
 
     infile.close()
 
@@ -26,7 +26,7 @@ def main():
         # print(pair)
 
         for i in range(0, len(pair)-1, 2):
-            all_homs.add('ishom({}, {}).\n'.format(pair[i], pair[i+1]))
+            all_homs.add('ishom(\"{}\", \"{}\").\n'.format(pair[i], pair[i+1]))
 
     infile.close()
 
