@@ -75,7 +75,7 @@ class App(QMainWindow):
 
         answer = 'False'
         # uses regex to see if true was returned by swipl
-        if re.search('true', response[0]):
+        if re.search('true', response[0][-10:]):
             answer = 'True'
 
         print(question + '    ' + answer)
