@@ -26,7 +26,7 @@ class App(QMainWindow):
         gaps = 20
         # Create textbox
         self.prompt_label = QLabel(self)
-        self.prompt_label.setText('Please enter your query to be entered in swipl: ')
+        self.prompt_label.setText('Please enter your knock knock joke below: ')
         self.prompt_label.move(gaps, gaps)
         self.prompt_label.resize(self.width/2,gaps)
 
@@ -86,6 +86,10 @@ class App(QMainWindow):
         # added repaint due to the know compatibility issue with MAC OSx
         # https://stackoverflow.com/questions/56553257/pyinstaller-and-pyqt5-macos-mojave-compatibility-issues
         self.answer_label.setText(answer)
+        self.answer_label.setStyleSheet("color: green;")
+        if answer == 'False':
+            self.answer_label.setStyleSheet("color: red;")
+
         self.answer_label.repaint()
         self.textbox.setText("")
         self.textbox.repaint()
