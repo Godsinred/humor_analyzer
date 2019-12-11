@@ -302,13 +302,13 @@ ishom(A, B):- get_all_homonyms(A, [], L), common_member(L, B).
 % ishom(A, B) :- ishom(B,A).
 %
 % ishom([to], [too, of, who, !]).
-% ishom(A,B) :- ishom(B,A).
-% ishom(A,B) :- ishom(A,C), ishom(C,B).
+% ishom(A,B) :- ishom(B,A), writeln('rule2').
+% ishom(A,B) :- ishom(A,C), ishom(C,B), writeln('rule1').
 
-get_all_homonyms([], R, K) :- append([], R, K).
-get_all_homonyms([LH|LT], R, K) :- !, ishom(LH, E), append(R, [E], S), get_all_homonyms(LT, S, K).
+get_all_homonyms([], R, K) :- writeln("empty list"), append([], R, K).
+get_all_homonyms([LH|LT], R, K) :- writeln("here"), !, ishom(LH, E), writeln(E), append(R, [E], S), writeln(S),  get_all_homonyms(LT, S, K).
 
-get_all_homonyms([_|LT], R, K) :- get_all_homonyms(LT, R, K).
+get_all_homonyms([_|LT], R, K) :- writeln("here1"), writeln(R), get_all_homonyms(LT, R, K).
 % get_all_homonyms([too, asdfas, to, where], [], L).
 
 common_member(X,Y) :-
@@ -328,7 +328,7 @@ common_member(X,Y) :-
 % https://www.swi-prolog.org/pldoc/man?predicate=%5C%3D/2
 %
 % This is pretty much appending one word to X at a time until it matches funnyFirst as long as X is not []
-substring(X,S) :- append(_,T,S), append(X,_,T) , X \= [].
+substring(X,S) :- append(_,T,S), append(X,_,T) , X \= [] , write('substring write: '), writeln(X).
 
 funnyFirst([A, B, "."]) :- A=="knock", A==B. % first two words must be the same
 
@@ -360,27 +360,44 @@ funnyMain(L) :-  substring(First,L),
   funnyFirst(First),
   append(First,Rest,L),
 
+  writeln(''), write('funnyFirst matched: '), writeln(First),
+  write('Here is the rest of the list: '), writeln(Rest), writeln(''),
+
   substring(Second,Rest),
   funnySecond(Second),
   append(Second,Rest2,Rest),
+
+  writeln(''), write('funnySecond matched: '), writeln(Second),
+  write('Here is the rest of the list: '), writeln(Rest2), writeln(''),
 
   substring(Third,Rest2),
   funnyThird(Third),
   append(Third,Rest3,Rest2),
 
+  writeln(''), write('funnyThird matched: '), writeln(Third),
+  write('Here is the rest of the list: '), writeln(Rest3),
   list_butlast(Third, NewThird),
+  write("here is what we need to match: "), writeln(NewThird), writeln(''),
 
   substring(Fourth,Rest3),
   funnyFourth(Fourth),
   append(Fourth,Rest4,Rest3),
 
+  writeln(''), write('funnyFourth matched: '), writeln(Fourth),
+  write('Here is the rest of the list: '), writeln(Rest4),
   list_butlast(Fourth, NewFourth),
   list_butlast(NewFourth, NewNewFourth),
+  write("here is what we need to match: "), writeln(NewNewFourth), writeln(''),
 
+  writeln('Checking if Third and Fourth are the same.'),
   checkThirdFourth(NewThird, NewNewFourth),
 
+  writeln('Now comparing analyzing the rest of the list to determine humor.'),
+  writeln(NewThird),
+  writeln(Rest4), !,
+
   ishom(NewThird, Rest4),
-  writeln('true')
+  writeln('true'), writeln('')
   .
 
 % ==== function docs ====
@@ -393,4 +410,4 @@ funnyMain(L) :-  substring(First,L),
 %
 % writeln/1
 % https://www.swi-prolog.org/pldoc/man?predicate=writeln/1
-funny(S) :- split_string(S, " ", " ", L), funnyMain(L).
+funny(S) :- split_string(S, " ", " ", L), write("L="),writeln(L), funnyMain(L).

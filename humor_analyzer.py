@@ -75,7 +75,7 @@ class App(QMainWindow):
 
         answer = 'False'
         # uses regex to see if true was returned by swipl
-        if re.search('true', response[0][-10:]):
+        if re.search('true', response[0]):
             answer = 'True'
 
         print(question + '    ' + answer)
@@ -119,27 +119,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = App()
     sys.exit(app.exec_())
-
-
-
-
-# p.stdin.write('assert(car(honda, 18000, red)).')
-# p.stdin.write('assert(car(toyota, 18000, white)).')
-# p.stdin.write('assert(car(ford, 25000, red)).')
-# p.stdin.write('assert(car(acura, 50000, white)).')
-# p.stdin.write('assert(car(bmw, 60000, red)).')
-# p.stdin.write('[user]. recommendcar(Age, Car) :- Age =< 25, car(Car, Cost, red), Cost =< 30000.')
-# p.stdin.write('recommendcar(20, X).')
-# output = p.stdout.read()
-# print(output)
-# print(p.communicate('assert(car(honda, 18000, red)). [user]. recommendcar(Age, Car) :- Age =< 25, car(Car, Cost, red), Cost =< 30000. recommendcar(20, X).', timeout=3))
-
-# print(p.communicate('assert(car(honda, 18000, red)).', timeout=3))
-# print(p.communicate('assert(car(toyota, 18000, white)).', timeout=3))
-# print(p.communicate('assert(car(ford, 25000, red)).', timeout=3))
-# print(p.communicate('assert(car(acura, 50000, white)).', timeout=3))
-# print(p.communicate('assert(car(bmw, 60000, red)).', timeout=3))
-# print(p.communicate('[user]. recommendcar(Age, Car) :- Age =< 25, car(Car, Cost, red), Cost =< 30000 .', timeout=3))
-
-# os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-# p.kill()
